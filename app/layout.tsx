@@ -6,6 +6,7 @@ import React from "react";
 import "./globals.css";
 
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/context/Theme";
 
 const inter = localFont({
@@ -52,6 +53,8 @@ export default async function RootLayout({
           >
             {children}
           </ThemeProvider>
+
+          <Toaster />
         </body>
       </SessionProvider>
     </html>
