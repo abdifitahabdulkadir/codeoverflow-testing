@@ -1,7 +1,6 @@
-import { redirect } from "next/navigation";
-
 import { auth, signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
+import ROUTES from "@/constants/routes";
 
 async function Home() {
   const session = await auth();
@@ -12,9 +11,7 @@ async function Home() {
       <form
         action={async () => {
           "use server";
-          await signOut();
-
-          redirect("/sign-in");
+          await signOut({ redirectTo: ROUTES.SIGN_IN });
         }}
       >
         <Button type="submit">logout</Button>
