@@ -1,9 +1,88 @@
 import Link from "next/link";
 
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+
+const questions = [
+  {
+    _id: "1",
+    title: "What is the best programming language?",
+    tags: [
+      {
+        _id: "1",
+        name: "Javascript",
+      },
+
+      {
+        _id: "2",
+        name: "Python",
+      },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://images.unsplash.com/photo-1719937206220-f7c76cc23d78?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date("2024-10-25"),
+  },
+
+  {
+    _id: "2",
+    title: "What is the best programming language?",
+    tags: [
+      {
+        _id: "1",
+        name: "Javascript",
+      },
+      {
+        _id: "2",
+        name: "Python",
+      },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://images.unsplash.com/photo-1719937206220-f7c76cc23d78?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date("2024-10-25"),
+  },
+
+  {
+    _id: "3",
+    title: "What is the best programming language?",
+    tags: [
+      {
+        _id: "1",
+        name: "Javascript",
+      },
+      {
+        _id: "2",
+        name: "Python",
+      },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://images.unsplash.com/photo-1719937206220-f7c76cc23d78?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date("2024-10-25"),
+  },
+];
 
 async function Home() {
   return (
@@ -33,10 +112,9 @@ async function Home() {
       <HomeFilter />
 
       <div className="mt-10 flex w-full flex-col gap-6">
-        <p>Question Card</p>
-        <p>Question Card</p>
-        <p>Question Card</p>
-        <p>Question Card</p>
+        {questions.map((question) => (
+          <QuestionCard key={question._id} question={question} />
+        ))}
       </div>
     </>
   );
