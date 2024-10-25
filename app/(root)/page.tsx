@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 
@@ -19,7 +20,13 @@ async function Home() {
       </section>
 
       <section className="mt-11">
-        <p>LocalSearchBar</p>
+        <LocalSearch
+          route="/"
+          imgSrc="/icons/search.svg"
+          placeholder="Search questions..."
+          iconPosition="left"
+          otherClasses="flex-1"
+        />
       </section>
 
       <p>Home Filters</p>
