@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MDXEditorMethods } from "@mdxeditor/editor";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -25,6 +26,8 @@ const Editor = dynamic(() => import("@/components/editor"), {
 });
 
 const QuestionForm = () => {
+  const editorRef = useRef<MDXEditorMethods>(null);
+
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
@@ -77,7 +80,11 @@ const QuestionForm = () => {
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
-                <Editor />
+                <Editor
+                  value={field.value}
+                  editorRef={editorRef}
+                  fieldChange={field.onChange}
+                />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Introduce the problem and expand on what you put in the title.

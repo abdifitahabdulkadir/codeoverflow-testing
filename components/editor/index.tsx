@@ -26,15 +26,33 @@ import {
   Separator,
   InsertThematicBreak,
   diffSourcePlugin,
+  MDXEditorMethods,
 } from "@mdxeditor/editor";
+import { basicDark } from "cm6-theme-basic-dark";
+import { useTheme } from "next-themes";
+import { Ref } from "react";
 
 import "@mdxeditor/editor/style.css";
+import "./dark-editor.css";
 
-const Editor = () => {
+interface Props {
+  value: string;
+  editorRef: Ref<MDXEditorMethods> | null;
+  fieldChange: (value: string) => void;
+}
+
+const Editor = ({ value, editorRef, fieldChange }: Props) => {
+  const { resolvedTheme } = useTheme();
+
+  const themeExtension = resolvedTheme === "dark" ? [basicDark] : [];
+
   return (
     <MDXEditor
-      markdown="Hello World 👋"
-      className="background-light800_dark200 light-border-2 markdown-editor w-full border"
+      key={resolvedTheme}
+      markdown={value}
+      ref={editorRef}
+      onChange={fieldChange}
+      className="background-light800_dark200 light-border-2 markdown-editor dark-editor w-full border"
       plugins={[
         headingsPlugin(),
         listsPlugin(),
@@ -48,18 +66,21 @@ const Editor = () => {
         codeMirrorPlugin({
           codeBlockLanguages: {
             css: "css",
+            txt: "txt",
             sql: "sql",
-            jsx: "jsx",
-            tsx: "tsx",
             html: "html",
             sass: "sass",
             scss: "scss",
             bash: "bash",
+            json: "json",
             js: "javascript",
             ts: "typescript",
             "": "unspecified",
+            tsx: "TypeScript (React)",
+            jsx: "JavaScript (React)",
           },
           autoLoadLanguageSupport: true,
+          codeMirrorExtensions: themeExtension,
         }),
         diffSourcePlugin({ viewMode: "rich-text", diffMarkdown: "" }),
         toolbarPlugin({
