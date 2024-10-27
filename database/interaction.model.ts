@@ -5,18 +5,19 @@ export interface IInteraction extends Document {
   action: string;
   actionId: Schema.Types.ObjectId;
   actionType: string;
-  createdAt: Date;
 }
 
-const InteractionSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  action: { type: String, required: true }, // 'upvote', 'downvote', 'view', 'ask_question',
-  actionId: { type: Schema.Types.ObjectId, required: true }, // 'questionId', 'answerId',
-  actionType: { type: String, enum: ["question", "answer"], required: true },
-  createdAt: { type: Date, default: Date.now },
-});
+const InteractionSchema = new Schema<IInteraction>(
+  {
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    action: { type: String, required: true }, // 'upvote', 'downvote', 'view', 'ask_question',
+    actionId: { type: Schema.Types.ObjectId, required: true }, // 'questionId', 'answerId',
+    actionType: { type: String, enum: ["question", "answer"], required: true },
+  },
+  { timestamps: true }
+);
 
 const Interaction =
-  models.Interaction || model("Interaction", InteractionSchema);
+  models?.Interaction || model<IInteraction>("Interaction", InteractionSchema);
 
 export default Interaction;

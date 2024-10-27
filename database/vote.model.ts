@@ -5,17 +5,18 @@ export interface IVote extends Document {
   id: Schema.Types.ObjectId;
   type: string;
   voteType: string;
-  createdAt: Date;
 }
 
-const VoteSchema = new Schema({
-  author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  id: { type: Schema.Types.ObjectId, required: true },
-  type: { type: String, enum: ["question", "answer"], required: true },
-  voteType: { type: String, enum: ["upvote", "downvote"], required: true },
-  createdAt: { type: Date, default: Date.now },
-});
+const VoteSchema = new Schema<IVote>(
+  {
+    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    id: { type: Schema.Types.ObjectId, required: true },
+    type: { type: String, enum: ["question", "answer"], required: true },
+    voteType: { type: String, enum: ["upvote", "downvote"], required: true },
+  },
+  { timestamps: true }
+);
 
-const Vote = models.Vote || model("Vote", VoteSchema);
+const Vote = models?.Vote || model<IVote>("Vote", VoteSchema);
 
 export default Vote;
