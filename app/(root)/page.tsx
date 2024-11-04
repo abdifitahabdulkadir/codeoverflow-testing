@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/http-errors";
+import dbConnect from "@/lib/mongoose";
 
 const questions = [
   {
@@ -90,6 +91,8 @@ const test = async () => {
   try {
     // throw new Error("test");
     // throw new NotFoundError("test");
+    await dbConnect();
+
     throw new ValidationError({
       title: ["Required"],
       tags: ['"Javascript" is not a valid tag.'],
