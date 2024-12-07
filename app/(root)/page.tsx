@@ -5,86 +5,20 @@ import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import { getQuestions } from "@/lib/actions/question.action";
 
-const questions = [
-  {
-    _id: "1",
-    title: "What is the best programming language?",
-    tags: [
-      {
-        _id: "1",
-        name: "Javascript",
-      },
+async function Home({ searchParams }: RouteParams) {
+  const { page, pageSize, query, filter } = await searchParams;
 
-      {
-        _id: "2",
-        name: "Python",
-      },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      image:
-        "https://images.unsplash.com/photo-1719937206220-f7c76cc23d78?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    upvotes: 10,
-    answers: 5,
-    views: 100,
-    createdAt: new Date("2024-10-25"),
-  },
+  const { success, data, error } = await getQuestions({
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query,
+    filter,
+  });
 
-  {
-    _id: "2",
-    title: "What is the best programming language?",
-    tags: [
-      {
-        _id: "1",
-        name: "Javascript",
-      },
-      {
-        _id: "2",
-        name: "Python",
-      },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      image:
-        "https://images.unsplash.com/photo-1719937206220-f7c76cc23d78?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    upvotes: 10,
-    answers: 5,
-    views: 100,
-    createdAt: new Date("2024-10-25"),
-  },
+  const { questions } = data || {};
 
-  {
-    _id: "3",
-    title: "What is the best programming language?",
-    tags: [
-      {
-        _id: "1",
-        name: "Javascript",
-      },
-      {
-        _id: "2",
-        name: "Python",
-      },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      image:
-        "https://images.unsplash.com/photo-1719937206220-f7c76cc23d78?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    upvotes: 10,
-    answers: 5,
-    views: 100,
-    createdAt: new Date("2024-10-25"),
-  },
-];
-
-async function Home() {
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -111,11 +45,25 @@ async function Home() {
 
       <HomeFilter />
 
-      <div className="mt-10 flex w-full flex-col gap-6">
-        {questions.map((question) => (
-          <QuestionCard key={question._id} question={question} />
-        ))}
-      </div>
+      {success ? (
+        <div className="mt-10 flex w-full flex-col gap-6">
+          {questions && questions.length > 0 ? (
+            questions.map((question) => (
+              <QuestionCard key={question._id} question={question} />
+            ))
+          ) : (
+            <div className="mt-10 flex w-full items-center justify-center">
+              <p className="text-dark400_light700">No questions found</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-10 flex w-full items-center justify-center">
+          <p className="text-dark400_light700">
+            {error?.message || "Failed to fetch questions"}
+          </p>
+        </div>
+      )}
     </>
   );
 }
