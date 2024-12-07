@@ -47,3 +47,8 @@ interface Question {
   answers: number;
   views: number;
 }
+
+interface RouteParams {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string>>;
+}
