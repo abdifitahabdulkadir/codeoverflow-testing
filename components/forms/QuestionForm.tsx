@@ -128,7 +128,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           description: "Your question has been posted successfully.",
         });
 
-        router.push(ROUTES.QUESTION(result.data?._id as string));
+        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
       } else {
         toast({
           title: `Error (${result.status})`,
