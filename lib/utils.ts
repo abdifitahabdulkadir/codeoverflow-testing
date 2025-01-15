@@ -7,7 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getDeviconClassName(techName: string) {
   const normalizedTech = techName.replace(/[ .]/g, "").toLowerCase();
-  console.log(normalizedTech, techName);
 
   // Dictionary mapping possible technology names to Devicon class names
   const techMap: { [key: string]: string } = {
