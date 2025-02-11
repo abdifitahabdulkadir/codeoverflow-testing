@@ -49,6 +49,13 @@ interface Question {
   views: number;
 }
 
+interface Answer {
+  _id: string;
+  author: Author;
+  content: string;
+  createdAt: Date;
+}
+
 interface RouteParams {
   params: Promise<Record<string, string>>;
   searchParams: Promise<Record<string, string>>;
