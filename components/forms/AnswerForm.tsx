@@ -5,12 +5,14 @@ import { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { toast } from "@/hooks/use-toast";
 import { createAnswer } from "@/lib/actions/answer.action";
+import { api } from "@/lib/api";
 import { AnswerSchema } from "@/lib/validations";
 
 import { Button } from "../ui/button";
@@ -28,9 +30,12 @@ const Editor = dynamic(() => import("@/components/editor"), {
 
 interface Props {
   questionId: string;
+  questionTitle: string;
+  questionContent: string;
 }
 
-const AnswerForm = ({ questionId }: Props) => {
+const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
+  const session = useSession();
   const [isAnswering, startAnsweringTransition] = useTransition();
 
   const [aiSubmitting, setAiSubmitting] = useState(false);
@@ -56,6 +61,10 @@ const AnswerForm = ({ questionId }: Props) => {
           title: "Success",
           description: "Your answer has been created successfully.",
         });
+
+        if (editorRef.current) {
+          editorRef.current.setMarkdown("");
+        }
       } else {
         toast({
           title: `Error (${result.status})`,
@@ -64,6 +73,60 @@ const AnswerForm = ({ questionId }: Props) => {
         });
       }
     });
+  };
+
+  const generateAIAnswer = async () => {
+    if (session.status !== "authenticated") {
+      return toast({
+        title: "Please log in",
+        description: "You must log in to generate an AI answer.",
+      });
+    }
+
+    setAiSubmitting(true);
+
+    try {
+      const { success, data, error } = await api.ai.getAnswer(
+        questionTitle,
+        questionContent
+      );
+
+      if (!success) {
+        return toast({
+          title: "Error",
+          description: `Failed to generate AI answer. Please try again. ${JSON.stringify(
+            error
+          )}`,
+          variant: "destructive",
+        });
+      }
+
+      const formattedAnswer = data.replace(/<br>/g, " ").toString().trim();
+
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(formattedAnswer);
+
+        // validate content field automatically
+        form.setValue("content", formattedAnswer);
+        form.trigger("content");
+      }
+
+      toast({
+        title: "AI Answer Generated",
+        description: "The AI has successfully generated an answer.",
+      });
+    } catch (error: Error | unknown) {
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "There was a problem with your request.",
+        variant: "destructive",
+      });
+    } finally {
+      setAiSubmitting(false);
+    }
   };
 
   return (
@@ -76,6 +139,7 @@ const AnswerForm = ({ questionId }: Props) => {
         <Button
           className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
           disabled={aiSubmitting}
+          onClick={generateAIAnswer}
         >
           {aiSubmitting ? (
             <>
