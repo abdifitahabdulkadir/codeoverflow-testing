@@ -1,6 +1,7 @@
 "use server";
 
 import mongoose, { ClientSession } from "mongoose";
+import { revalidatePath } from "next/cache";
 
 import { Answer, Question } from "@/database";
 import Vote from "@/database/vote.model";
@@ -139,6 +140,8 @@ export async function createVote(
 
     await session.commitTransaction();
     session.endSession();
+
+    revalidatePath(`/questions/${targetId}`);
 
     return { success: true };
   } catch (error) {
