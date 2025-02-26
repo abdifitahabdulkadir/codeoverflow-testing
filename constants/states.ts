@@ -48,8 +48,4 @@ export const EMPTY_COLLECTIONS = {
   title: "Collections Are Empty",
   message:
     "Looks like you haven’t created any collections yet. Start curating something extraordinary today",
-  button: {
-    text: "Save to Collection",
-    href: ROUTES.COLLECTION,
-  },
 };
