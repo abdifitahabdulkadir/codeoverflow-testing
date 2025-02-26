@@ -1,11 +1,26 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
+import { hasVoted } from "@/lib/actions/vote.action";
 import { getTimeStamp } from "@/lib/utils";
 
 import Preview from "../editor/Preview";
 import UserAvatar from "../UserAvatar";
+import Votes from "../votes/Votes";
 
-const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
+const AnswerCard = async ({
+  _id,
+  author,
+  content,
+  upvotes,
+  downvotes,
+  createdAt,
+}: Answer) => {
+  const hasVotedPromise = hasVoted({
+    targetId: _id,
+    targetType: "answer",
+  });
+
   return (
     <article className="light-border border-b py-10">
       <span id={JSON.stringify(_id)} className="hash-span"></span>
@@ -35,7 +50,15 @@ const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
         </div>
 
         <div className="flex justify-end">
-          <p>Votes</p>
+          <Suspense fallback={<div>...</div>}>
+            <Votes
+              targetId={_id}
+              targetType="answer"
+              hasVotedPromise={hasVotedPromise}
+              upvotes={upvotes}
+              downvotes={downvotes}
+            />
+          </Suspense>
         </div>
       </div>
 
