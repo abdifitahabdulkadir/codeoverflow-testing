@@ -132,7 +132,9 @@ const Page = async ({ params, searchParams }: RouteParams) => {
 
       <section className="my-5">
         <AllAnswers
+          page={Number(page) || 1}
           data={answersResult?.answers || []}
+          isNext={answersResult?.isNext || false}
           success={areAnswersLoaded}
           error={answersError}
           totalAnswers={answersResult?.totalAnswers || 0}
