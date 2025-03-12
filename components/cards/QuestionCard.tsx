@@ -15,7 +15,7 @@ const QuestionCard = ({
   question: { _id, title, tags, author, createdAt, upvotes, answers, views },
 }: Props) => {
   return (
-    <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
+    <div className="card-wrapper rounded-[10px] px-7 py-9 sm:px-11">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
         <div>
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
@@ -42,22 +42,25 @@ const QuestionCard = ({
 
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <div className="flex flex-row items-center gap-1">
-          <UserAvatar
-            id={author._id}
-            name={author.name}
-            imageUrl={author.image}
-            className="size-4"
-            fallbackClassName="text-[8px]"
-          />
+          <div className="flex flex-row items-center gap-1">
+            <UserAvatar
+              id={author._id}
+              name={author.name}
+              imageUrl={author.image}
+              className="size-4"
+              fallbackClassName="text-[8px]"
+            />
+            <p className="body-medium text-dark400_light700">{author.name}</p>
+          </div>
 
           <Metric
             value="• asked"
             title={getTimeStamp(createdAt)}
-            textStyles="body-medium text-dark400_light700"
+            textStyles="body-medium text-dark400_light700 max-sm:hidden"
           />
         </div>
 
-        <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
+        <div className="flex items-center gap-5 max-sm:flex-wrap max-sm:justify-start">
           <Metric
             imgUrl="/icons/like.svg"
             alt="like icon"
