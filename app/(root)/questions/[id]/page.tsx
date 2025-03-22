@@ -55,11 +55,13 @@ const Page = async ({ params, searchParams }: RouteParams) => {
         <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
           <div className="flex items-center justify-start gap-1">
             <UserAvatar
-              id={"author_id"}
+              id={question.author._id}
               name={question.author.name}
+              imageUrl={question.author.image}
               className="size-[22px]"
               fallbackClassName="text-[10px]"
             />
+
             <Link href={ROUTES.PROFILE(question.author._id)}>
               <p className="paragraph-semibold text-dark300_light700">
                 {question.author.name}
