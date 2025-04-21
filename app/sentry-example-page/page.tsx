@@ -1,7 +1,7 @@
 "use client";
 
-import Head from "next/head";
 import * as Sentry from "@sentry/nextjs";
+import Head from "next/head";
 import { useState } from "react";
 
 export default function Page() {
@@ -61,7 +61,7 @@ export default function Page() {
                   setHasSentError(true);
                   throw new Error("Sentry Example Frontend Error");
                 }
-              },
+              }
             );
           }}
         >
