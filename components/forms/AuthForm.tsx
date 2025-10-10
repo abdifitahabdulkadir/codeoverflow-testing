@@ -7,7 +7,6 @@ import {
   useForm,
   SubmitHandler,
   FieldValues,
-  UseFormReturn,
   Path,
   DefaultValues,
 } from "react-hook-form";
@@ -41,8 +40,9 @@ const AuthForm = <T extends FieldValues>({
 }: AuthFormProps<T>) => {
   const router = useRouter();
 
-  const form: UseFormReturn<T> = useForm<T>({
-    resolver: zodResolver(schema),
+  const form = useForm<T>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(schema as any),
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
