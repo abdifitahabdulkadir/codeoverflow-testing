@@ -33,7 +33,7 @@ const config: Config = {
     // this pattern will match any import starting with "@/" and replace it with the actual path
     // relative to the root directory of your project.
     // "^@/(.*)$": "<rootDir>/$1",
-    "^@/(.*)$": "<rootDir>/$1",
+    "^@/(.*)$": "<rootDir>/$1"
   },
 
   // setup file that will run afer env is being 
