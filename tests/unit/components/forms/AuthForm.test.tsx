@@ -1,9 +1,16 @@
 import AuthForm from "@/components/forms/AuthForm";
 import { SignInSchema, SignUpSchema } from "@/lib/validations";
+import { resetAllMockes } from "@/tests/mocks";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 const user = userEvent.setup();
+
 describe("Auth Form", () => {
+  // clean up the test before each test.
+  beforeEach(() => {
+    resetAllMockes();
+  });
+
   const onSubmit = jest.fn();
   describe("Sign In Form", () => {
     describe("Rendering The Form", () => {
@@ -160,6 +167,8 @@ describe("Auth Form", () => {
         });
       });
     });
+
+    describe("Success", () => {});
   });
 
   describe("Sign Up Form", () => {
