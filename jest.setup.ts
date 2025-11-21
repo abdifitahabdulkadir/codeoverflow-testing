@@ -11,7 +11,7 @@ jest.mock("next/navigation", () => ({
   useRouter: mockUseRouter,
 }));
 
-jest.mock("@hooks/use-toast", () => ({
+jest.mock("@/hooks/use-toast", () => ({
   useToast: mockUseToast,
   toast: mockToast,
 }));

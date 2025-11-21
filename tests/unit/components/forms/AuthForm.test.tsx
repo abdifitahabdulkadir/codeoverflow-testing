@@ -1,6 +1,7 @@
 import AuthForm from "@/components/forms/AuthForm";
+import ROUTES from "@/constants/routes";
 import { SignInSchema, SignUpSchema } from "@/lib/validations";
-import { resetAllMockes } from "@/tests/mocks";
+import { mockRouters, mockToast, resetAllMockes } from "@/tests/mocks";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 const user = userEvent.setup();
@@ -168,7 +169,82 @@ describe("Auth Form", () => {
       });
     });
 
-    describe("Success", () => {});
+    describe("Success Handling", () => {
+      it("Should show success Message and redirect to home page upon successfull sign in", async () => {
+        const onSubmitFunction = jest.fn().mockResolvedValue({ success: true });
+
+        render(
+          <AuthForm
+            formType="SIGN_IN"
+            schema={SignInSchema}
+            defaultValues={{
+              email: "",
+              password: "",
+            }}
+            onSubmit={onSubmitFunction}
+          />
+        );
+
+        const emailInput = screen.getByLabelText("Email Address");
+        const passwordInput = screen.getByLabelText("Password");
+        const submitButton = screen.getByRole("button", {
+          name: "Sign In",
+        });
+
+        await user.type(emailInput, "seaph@gmail.com");
+        await user.type(passwordInput, "123456");
+        await user.click(submitButton);
+
+        expect(mockToast).toHaveBeenCalledWith({
+          title: "Success",
+          description: "You have successfully signed in.",
+        });
+
+        expect(mockRouters.replace).toHaveBeenCalledWith(ROUTES.HOME);
+      });
+
+      it("Should not redirect to home when Form Fails", async () => {
+        // mocking the return object of this funciton with our custom
+        // implementation of what would the server action return
+        // incase samething had failed.
+        const onSubmitFunction = jest.fn().mockResolvedValue({
+          success: false,
+          status: 400,
+          error: { message: "Invalid credentials" },
+        });
+
+        render(
+          <AuthForm
+            formType="SIGN_IN"
+            schema={SignInSchema}
+            defaultValues={{
+              email: "",
+              password: "",
+            }}
+            onSubmit={onSubmitFunction}
+          />
+        );
+
+        const emailInput = screen.getByLabelText("Email Address");
+        const passwordInput = screen.getByLabelText("Password");
+        const submitButton = screen.getByRole("button", {
+          name: "Sign In",
+        });
+
+        await user.type(emailInput, "seaph@gmail.com");
+        await user.type(passwordInput, "1234566");
+        await user.click(submitButton);
+
+        expect(mockToast).toHaveBeenCalledWith({
+          title: `Error (400)`,
+          description: "Invalid credentials",
+          variant: "destructive",
+        });
+
+        // expecting that user will not be redirected when form fails
+        expect(mockRouters.replace).not.toHaveBeenCalledWith(ROUTES.HOME);
+      });
+    });
   });
 
   describe("Sign Up Form", () => {
