@@ -43,43 +43,6 @@ describe("AnswerForm Component", () => {
   });
 
   describe("AI Answer Generation", () => {
-    it("should generate an AI answer for an authenticated user", async () => {
-      mockUseSession.mockReturnValue({
-        data: mockSession,
-        status: "authenticated",
-        update: jest.fn(),
-      });
-      mockGetAIAnswer.mockResolvedValue({
-        success: true,
-        data: "This is an AI-generated answer.",
-      });
-
-      render(
-        <AnswerForm
-          questionId="123"
-          questionTitle="Test Question"
-          questionContent="Test Content"
-        />
-      );
-
-      await user.click(
-        screen.getByRole("button", { name: /generate ai answer/i })
-      );
-
-      expect(mockGetAIAnswer).toHaveBeenCalledWith(
-        "Test Question",
-        "Test Content",
-        ""
-      );
-      expect(toast).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "AI Answer Generated",
-          description: "The AI has successfully generated an answer.",
-        })
-      );
-    });
-
-    // mine
     it("Should generate AI answer with authenticated User -mine", async () => {
       //this will always retrn value whenever mock function is called.
       mockUseSession.mockReturnValue({
