@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { mockToast, mockUseToast } from "./tests/mocks";
+import { mockToast, mockUseSession, mockUseToast } from "./tests/mocks";
 import { mockUseRouter } from "./tests/mocks/router.mock";
 
 /**
@@ -14,4 +14,8 @@ jest.mock("next/navigation", () => ({
 jest.mock("@/hooks/use-toast", () => ({
   useToast: mockUseToast,
   toast: mockToast,
+}));
+
+jest.mock("next-auth/react", () => ({
+  useSession: mockUseSession,
 }));

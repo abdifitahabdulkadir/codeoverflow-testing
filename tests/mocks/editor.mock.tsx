@@ -19,7 +19,6 @@ const MockEditor = jest.fn(({ editorRef, value, fieldChange, ...props }) => {
       defaultValue={value}
       ref={editorRef}
       placeholder="Wirte Your Content Here"
-      value={value}
       onChange={fieldChange}
       {...props}
     />
